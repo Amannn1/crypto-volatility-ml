@@ -1,2 +1,174 @@
-# crypto-volatility-ml
-End-to-end ML project for cryptocurrency volatility prediction using historical OHLCV and market cap data. Includes data preprocessing, feature engineering, RandomForest model training, evaluation, and Streamlit deployment.
+# Cryptocurrency Volatility Prediction
+
+End-to-end ML project to predict cryptocurrency volatility using historical OHLCV and market cap data.
+
+## Project Overview
+
+This project implements a complete machine learning pipeline for predicting cryptocurrency volatility from historical price and volume data. It includes:
+
+- **Data Preprocessing**: Handling missing values, data validation, and cleaning
+- **Feature Engineering**: Technical indicators, moving averages, Bollinger Bands, liquidity ratios
+- **Model Training**: RandomForest regressor for volatility prediction
+- **Evaluation**: Comprehensive metrics (RMSE, MAE, R²) on validation and test sets
+- **Deployment**: Optional Streamlit app for local predictions
+
+## Repository Structure
+
+```
+crypto-volatility-ml/
+├── data/
+│   └── crypto_prices.csv        # Input dataset (>50 cryptocurrencies)
+├── src/
+│   ├── data_loader.py           # Data loading utilities
+│   ├── preprocess.py            # Data cleaning and splitting
+│   ├── features.py              # Feature engineering
+│   ├── model.py                 # Model training and evaluation
+│   ├── train.py                 # End-to-end training script
+│   └── app_streamlit.py         # Streamlit deployment app
+├── requirements.txt             # Python dependencies
+└── README.md                    # This file
+```
+
+## Installation
+
+### Prerequisites
+- Python 3.8+
+- pip or conda
+
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Amannn1/crypto-volatility-ml.git
+   cd crypto-volatility-ml
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Usage
+
+### Training the Model
+
+Run the full training pipeline:
+
+```bash
+python -m src.train
+```
+
+This will:
+1. Load the crypto price data
+2. Clean and preprocess the data
+3. Engineer features (moving averages, technical indicators, etc.)
+4. Split data into train/val/test sets (time-based)
+5. Train a RandomForest model
+6. Evaluate on validation and test sets
+7. Save artifacts (model, scaler, feature names) to `artifacts/` directory
+
+### Running the Streamlit App
+
+```bash
+streamlit run src/app_streamlit.py
+```
+
+Then:
+1. Upload a CSV file with the same structure as training data
+2. View predicted volatility values and visualizations
+
+## Data Format
+
+Expected CSV columns:
+- `date` (datetime)
+- `symbol` (cryptocurrency symbol, e.g., BTC, ETH)
+- `open` (opening price)
+- `high` (high price)
+- `low` (low price)
+- `close` (closing price)
+- `volume` (trading volume)
+- `market_cap` (market capitalization)
+
+## Features Engineered
+
+- **Returns & Volatility**:
+  - Daily returns
+  - Rolling volatility (7, 14, 30 days)
+
+- **Technical Indicators**:
+  - Moving averages (7, 14, 30 days)
+  - Bollinger Bands (20-day middle, upper, lower bands)
+  - Average True Range (simple proxy)
+
+- **Liquidity Features**:
+  - Liquidity ratio (volume / market_cap)
+  - Rolling mean and std of liquidity ratio
+
+- **Calendar Features**:
+  - Day of week
+  - Month
+
+## Model Performance
+
+The RandomForest model is evaluated on:
+- **RMSE** (Root Mean Squared Error)
+- **MAE** (Mean Absolute Error)
+- **R²** (Coefficient of Determination)
+
+Metrics are reported on both validation and test sets.
+
+## Key Modules
+
+### `data_loader.py`
+Loads CSV data and performs basic datetime conversion and sorting.
+
+### `preprocess.py`
+- `clean_data()`: Handles missing values, duplicates, sanity checks
+- `scale_features()`: StandardScaler for feature normalization
+- `time_based_split()`: Temporal train/val/test split (no data leakage)
+
+### `features.py`
+Feature engineering pipeline:
+- Returns and rolling volatility
+- Liquidity ratios and statistics
+- Moving averages and Bollinger Bands
+- Calendar features
+
+### `model.py`
+- `train_volatility_model()`: Train RandomForest regressor
+- `evaluate_model()`: Compute RMSE, MAE, R²
+
+### `train.py`
+Orchestrates the full pipeline: load → clean → engineer features → split → scale → train → evaluate → save artifacts
+
+### `app_streamlit.py`
+Interactive web app for making predictions on new data.
+
+## Dependencies
+
+See `requirements.txt`:
+- pandas
+- numpy
+- scikit-learn
+- matplotlib
+- seaborn
+- streamlit
+- joblib
+
+## Future Enhancements
+
+- Integration with live cryptocurrency APIs (e.g., CoinGecko, Binance)
+- LSTM/GRU sequence models for time-series prediction
+- Hyperparameter tuning with GridSearchCV/RandomizedSearchCV
+- Cross-validation with TimeSeriesSplit
+- Feature importance analysis and visualization
+- Containerization with Docker for deployment
+- Automated retraining pipeline
+
+## License
+
+This project is provided as-is for educational purposes.
+
+## Author
+
+Amannn1
