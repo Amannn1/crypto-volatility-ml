@@ -2,6 +2,10 @@
 
 End-to-end ML project to predict cryptocurrency volatility using historical OHLCV and market cap data.
 
+## Problem and goals
+
+This project predicts short-term cryptocurrency **volatility** to help traders and risk managers quantify market risk for the next trading day using historical OHLCV and market cap data. The goal is to achieve low RMSE and MAE on 1-day ahead realized volatility while avoiding time-series data leakage.
+
 ## Project Overview
 
 This project implements a complete machine learning pipeline for predicting cryptocurrency volatility from historical price and volume data. It includes:
@@ -49,6 +53,22 @@ crypto-volatility-ml/
    ```
 
 ## Usage
+
+### Quick start
+
+Train the model end-to-end:
+
+```
+python -m src.train
+```
+
+Run the local Streamlit app:
+
+```
+streamlit run src/app_streamlit.py
+```
+
+Trained artifacts (model, scaler, feature list) are saved in the `artifacts/` directory and automatically loaded by the Streamlit app.
 
 ### Training the Model
 
@@ -110,6 +130,17 @@ Expected CSV columns:
 
 ## Model Performance
 
+### Baselines and model performance
+
+As a simple baseline, the previous day's volatility is used as the prediction. Reported metrics are on the held-out test set using a chronological split to avoid data leakage.
+
+| Model                | RMSE | MAE  | R²   |
+|----------------------|------|------|------|
+| Naive (prev vol)     | TBD  | TBD  | TBD  |
+| RandomForest (ours)  | TBD  | TBD  | TBD  |
+
+*(Fill in actual metrics after training)*
+
 The RandomForest model is evaluated on:
 - **RMSE** (Root Mean Squared Error)
 - **MAE** (Mean Absolute Error)
@@ -157,14 +188,12 @@ See `requirements.txt`:
 
 ## Future Enhancements
 
-- Integration with live cryptocurrency APIs (e.g., CoinGecko, Binance)
-- LSTM/GRU sequence models for time-series prediction
-- Hyperparameter tuning with GridSearchCV/RandomizedSearchCV
-- Cross-validation with TimeSeriesSplit
-- Feature importance analysis and visualization
-- Containerization with Docker for deployment
-- Automated retraining pipeline
-
+- [High] Integrate live cryptocurrency APIs (CoinGecko / Binance) for near real-time predictions
+- [High] Add hyperparameter tuning and cross-validation using `TimeSeriesSplit` for more robust evaluation
+- [Medium] Implement LSTM/GRU sequence models as a deep-learning baseline
+- [Medium] Add feature importance analysis and visualizations (permutation importance, SHAP)
+- [Low] Containerize with Docker and deploy the Streamlit app to Streamlit Community Cloud or Render
+- [Low] Build an automated retraining pipeline triggered by new data arrivals
 ## License
 
 This project is provided as-is for educational purposes.
