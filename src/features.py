@@ -1,3 +1,22 @@
+"""Feature engineering module for cryptocurrency volatility prediction.
+
+Target Variable:
+    The model predicts NEXT-DAY realized volatility (14-day rolling std of returns).
+    This is computed from FUTURE returns, so features at time t are aligned with
+    target at time t+1, ensuring NO LOOK-AHEAD BIAS.
+
+Feature Groups:
+    1. Returns & Volatility: Daily returns and rolling volatility windows (7, 14, 30 days)
+    2. Liquidity Features: Volume/market_cap ratio and rolling statistics
+    3. Technical Indicators: Moving averages (7, 14, 30 days) and Bollinger Bands
+    4. Calendar Features: Day of week and month (for seasonality)
+
+Key Notes:
+    - All rolling windows use PAST data only (no look-ahead)
+    - Missing values are handled by dropna(subset=[target_col])
+    - Features are engineered per symbol to avoid cross-contamination
+"""
+
 import pandas as pd
 import numpy as np
 
